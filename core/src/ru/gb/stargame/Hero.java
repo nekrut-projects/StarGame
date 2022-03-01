@@ -38,6 +38,11 @@ public class Hero {
             position.x += lastMove.x;
             position.y += lastMove.y;
         }
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            lastMove.set(MathUtils.cosDeg(angle) * (power / 2) * dt, MathUtils.sinDeg(angle) * power * dt);
+            position.x -= lastMove.x;
+            position.y -= lastMove.y;
+        }
 
         checkBorders();
     }

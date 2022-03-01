@@ -22,8 +22,8 @@ public class Background {
             scale = Math.abs(velocity.x / 40f) * 0.8f;
         }
         public void update(float dt){
-            position.x += (velocity.x - starGame.getHero().getLastMove().x * 15) * dt;
-            position.y += (velocity.y - starGame.getHero().getLastMove().y * 15) * dt;
+            position.x += (velocity.x - starGame.getHero().getLastMove().x * 5) * dt;
+            position.y += (velocity.y - starGame.getHero().getLastMove().y * 5) * dt;
 
             if (position.x < -20){
                 position.x = SCREEN_WIDTH + 20;
@@ -42,7 +42,7 @@ public class Background {
         this.starGame = starGame;
         this.textureCosmos = new Texture("bg.png");
         this.textureStar = new Texture("star16.png");
-        stars = new Star[STARS_COUNT];
+        this.stars = new Star[STARS_COUNT];
         for (int i = 0; i < stars.length; i++) {
             stars[i] = new Star();
         }
@@ -60,7 +60,7 @@ public class Background {
             batch.draw(textureStar, s.position.x - 8, s.position.y - 8, 8, 8, 16, 16,
                     s.scale, s.scale, 0, 0, 0, 16, 16, false, false);
 
-            if (MathUtils.random(300) < 1) {
+            if (MathUtils.random(500) < 1) {
                 batch.draw(textureStar, s.position.x - 8, s.position.y - 8, 8, 8,
                         16, 16, s.scale * 2, s.scale * 2,
                         0, 0, 0, 16, 16, false, false);
