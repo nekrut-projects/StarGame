@@ -1,14 +1,16 @@
-package ru.gb.stargame;
+package ru.gb.stargame.game;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
-import static ru.gb.stargame.ScreenManager.*;
+import static ru.gb.stargame.screen.ScreenManager.*;
 
 public class Background {
-    private final StarGame starGame;
+    private final GameController gc;
+    public static final int STARS_COUNT = 500;
 
     private class Star{
         private Vector2 position;
@@ -22,8 +24,8 @@ public class Background {
             scale = Math.abs(velocity.x / 40f) * 0.8f;
         }
         public void update(float dt){
-            position.x += (velocity.x - starGame.getHero().getLastMove().x * 15) * dt;
-            position.y += (velocity.y - starGame.getHero().getLastMove().y * 15) * dt;
+            position.x += (velocity.x - gc.getHero().getVelocity().x * 0.1f) * dt;
+            position.y += (velocity.y - gc.getHero().getVelocity().y * 0.1f) * dt;
 
             if (position.x < -20){
                 position.x = SCREEN_WIDTH + 20;
@@ -33,16 +35,16 @@ public class Background {
         }
     }
     private Texture textureCosmos;
-    private Texture textureStar;
+    private TextureRegion textureStar;
 
     private Star[] stars;
 
 
-    public Background(StarGame starGame) {
-        this.starGame = starGame;
-        this.textureCosmos = new Texture("bg.png");
-        this.textureStar = new Texture("star16.png");
-        stars = new Star[STARS_COUNT];
+    public Background(GameController gc) {
+        this.gc = gc;
+        this.textureCosmos = new Texture("images/bg.png");
+        this.textureStar = gc.getAtlas().findRegion("star16");
+        this.stars = new Star[STARS_COUNT];
         for (int i = 0; i < stars.length; i++) {
             stars[i] = new Star();
         }
@@ -58,12 +60,11 @@ public class Background {
         batch.draw(textureCosmos, 0, 0);
         for (Star s : stars){
             batch.draw(textureStar, s.position.x - 8, s.position.y - 8, 8, 8, 16, 16,
-                    s.scale, s.scale, 0, 0, 0, 16, 16, false, false);
+                    s.scale, s.scale, 0);
 
-            if (MathUtils.random(300) < 1) {
+            if (MathUtils.random(500) < 1) {
                 batch.draw(textureStar, s.position.x - 8, s.position.y - 8, 8, 8,
-                        16, 16, s.scale * 2, s.scale * 2,
-                        0, 0, 0, 16, 16, false, false);
+                        16, 16, s.scale * 2, s.scale * 2,0);
             }
         }
     }
