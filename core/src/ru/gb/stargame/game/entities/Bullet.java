@@ -1,6 +1,5 @@
-package ru.gb.stargame.game;
+package ru.gb.stargame.game.entities;
 
-import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import ru.gb.stargame.game.constants.BulletConstants;
 import ru.gb.stargame.game.helpers.Poolable;
