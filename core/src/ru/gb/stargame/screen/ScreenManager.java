@@ -1,8 +1,11 @@
-package ru.gb.stargame;
+package ru.gb.stargame.screen;
 
 public class ScreenManager {
+    public enum ScreenType{
+        GAME
+    }
+
     public static final int SCREEN_WIDTH = 1280;
     public static final int SCREEN_HEIGHT = 720;
-    public static final int STARS_COUNT = 500;
 
 }
