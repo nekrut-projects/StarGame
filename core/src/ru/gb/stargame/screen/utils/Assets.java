@@ -37,9 +37,19 @@ public class Assets {
         switch (type) {
             case GAME:
                 assetManager.load("images/game.pack", TextureAtlas.class);
+                createStandardFont(24);
                 createStandardFont(32);
-                assetManager.finishLoading();
-                textureAtlas = assetManager.get("images/game.pack", TextureAtlas.class);
+                break;
+            case MAIN_MENU:
+                assetManager.load("images/game.pack", TextureAtlas.class);
+                createStandardFont(24);
+                createStandardFont(72);
+                break;
+            case GAME_OVER:
+                assetManager.load("images/game.pack", TextureAtlas.class);
+                createStandardFont(24);
+                createStandardFont(32);
+                createStandardFont(72);
                 break;
         }
     }
@@ -60,5 +70,9 @@ public class Assets {
 
     public void clear() {
         assetManager.clear();
+    }
+
+    public void setAtlas() {
+        this.textureAtlas = assetManager.get("images/game.pack", TextureAtlas.class);
     }
 }

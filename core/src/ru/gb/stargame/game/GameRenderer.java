@@ -150,7 +150,6 @@ public class GameRenderer {
     private void renderBonusItems(){
         TextureRegion texture = textureAddWeapon;
         for (int i = 0; i < gc.getBonusItemManager().getActiveList().size(); i++) {
-            System.out.println("Render BEFORE switch() " + gc.getBonusItemManager().getActiveList().get(i));
             BonusItem bonus = gc.getBonusItemManager().getActiveList().get(i);
             switch (bonus.getType()){
                 case COINS:
@@ -166,8 +165,13 @@ public class GameRenderer {
                     texture = textureAddBullets;
                     break;
             }
-            batch.draw(texture, bonus.getPositionX() - texture.getRegionWidth()/2,
-                    bonus.getPositionY() - texture.getRegionHeight()/2);
+            float scale = (int)bonus.getLifetime() % 2 == 0 ? 1 : 0.8f;
+
+            batch.draw(texture, bonus.getPosition().x - (texture.getRegionWidth() / 2),
+                    bonus.getPosition().y - (texture.getRegionHeight() / 2),
+                    (texture.getRegionWidth() / 2), (texture.getRegionHeight() / 2),
+                    texture.getRegionWidth(), texture.getRegionHeight(),
+                    scale, scale, 0);
         }
 
     }

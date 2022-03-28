@@ -8,7 +8,7 @@ import ru.gb.stargame.game.helpers.Poolable;
 
 
 import static ru.gb.stargame.game.constants.AsteroidConstants.*;
-import static ru.gb.stargame.screen.ScreenManager.SCREEN_WIDTH;
+import static ru.gb.stargame.game.constants.ScreenConstants.WIDTH;
 
 public class Asteroid implements Poolable {
     private Vector2 position;
@@ -22,7 +22,7 @@ public class Asteroid implements Poolable {
 
     public Asteroid() {
         this.rotationSpeed = MathUtils.random(-180.0f, 180.0f);
-        this.position = new Vector2(MathUtils.random(-10, SCREEN_WIDTH - 20), -100);
+        this.position = new Vector2(MathUtils.random(-10, WIDTH - 20), -100);
         this.velocity = new Vector2(0, MathUtils.random(MIN_SPEED, MAX_SPEED));
         this.scale = 1.0f;
         this.angle = MathUtils.random( ANGLE, 0);

@@ -2,42 +2,36 @@ package ru.gb.stargame.game.entities;
 
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
+import ru.gb.stargame.game.constants.BonusConstants;
 import ru.gb.stargame.game.helpers.Poolable;
 
+import static ru.gb.stargame.game.managers.BonusItemManager.*;
+
 public class BonusItem implements Poolable {
-    public enum Type{
-        COINS,
-        MEDICINES,
-        BULLETS,
-        WEAPON;
-        private static Type getType(int type){
-            Type t = null;
-            for (int i = 0; i < Type.values().length; i++) {
-                if (values()[i].ordinal() == type){
-                    t = values()[i];
-                }
-            }
-            return t;
-        }
-    }
     private boolean active;
-    private Type type;
-    private float positionX;
-    private float positionY;
+    private TypeBonus type;
+    private float lifetime;
+    private Vector2 position;
+    private Vector2 velocity;
     private Circle hitArea;
 
     public BonusItem() {
+        this.position = new Vector2(0,0);
+        this.velocity = new Vector2(0, 0);
         this.hitArea = new Circle(0,0,0);
         this.active = false;
-        this.type = Type.MEDICINES;
+        this.type = TypeBonus.MEDICINES;
     }
 
-    public void activate(float positionX, float positionY){
-        this.positionX = positionX;
-        this.positionY = positionY;
+    public void activate(Vector2 position){
+        this.position.set(position);
+        this.velocity.set(MathUtils.random(-1.0f, 1.0f), MathUtils.random(-1.0f, 1.0f));
+        this.velocity.nor().scl(50.0f);
         this.active = true;
-        this.type = Type.getType(MathUtils.random(0, Type.values().length-1));
-        this.hitArea.set(positionX, positionY, 50);
+        this.type = TypeBonus.getType(MathUtils.random(0, TypeBonus.values().length-1));
+        this.hitArea.set(position, 50.0f);
+        this.lifetime = 0f;
     }
 
     public void deactivate(){
@@ -49,27 +43,28 @@ public class BonusItem implements Poolable {
         return active;
     }
 
-    public Type getType() {
+    public TypeBonus getType() {
         return type;
     }
 
-    public float getPositionX() {
-        return positionX;
-    }
-
-    public float getPositionY() {
-        return positionY;
-    }
-
-    public void setPositionX(float positionX) {
-        this.positionX = positionX;
-    }
-
-    public void setPositionY(float positionY) {
-        this.positionY = positionY;
+    public Vector2 getPosition() {
+        return position;
     }
 
     public Circle getHitArea() {
         return hitArea;
+    }
+
+    public void update(float dt) {
+        position.mulAdd(velocity, dt);
+        hitArea.setPosition(position);
+        lifetime += dt;
+        if (lifetime >= BonusConstants.LIFETIME){
+            deactivate();
+        }
+    }
+
+    public float getLifetime() {
+        return lifetime;
     }
 }

@@ -1,14 +1,12 @@
 package ru.gb.stargame.game.entities;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import ru.gb.stargame.game.constants.ScreenConstants;
 import ru.gb.stargame.game.managers.BulletManager;
 import ru.gb.stargame.game.managers.ParticleManager;
-import ru.gb.stargame.screen.ScreenManager;
 
 import static ru.gb.stargame.game.constants.BulletConstants.*;
 import static ru.gb.stargame.game.constants.HeroConstants.*;
@@ -76,7 +74,7 @@ public class Hero {
         this.particleManager = particleManager;
         this.velocity = new Vector2(0, 0);
         this.texture = texture;
-        this.position = new Vector2(ScreenManager.SCREEN_WIDTH / 2, ScreenManager.SCREEN_HEIGHT / 2);
+        this.position = new Vector2(ScreenConstants.WIDTH / 2, ScreenConstants.HEIGHT / 2);
         this.angle = 0.0f;
         this.fireTime = 0.0f;
         this.hp = MAX_HP;
@@ -86,7 +84,6 @@ public class Hero {
     public void update(float dt){
         fireTime += dt;
         hitArea.setPosition(position);
-        checkPressedKeys(dt);
         position.mulAdd(velocity, dt);
 
         float stopCoeff = 1.0f - dt;
@@ -97,7 +94,7 @@ public class Hero {
         checkBorders();
     }
 
-    private void shoot(){
+    public void shoot(){
         if (fireTime > RECHARGE_TIME) {
             fireTime = 0.0f;
             for (int i = 0; i < weapons.length; i++) {
@@ -119,44 +116,19 @@ public class Hero {
             position.x = texture.getRegionWidth() / 2;
             velocity.x *= -0.8;
         }
-        if (position.x > ScreenManager.SCREEN_WIDTH - texture.getRegionWidth()/2){
-            position.x = ScreenManager.SCREEN_WIDTH - texture.getRegionWidth()/2;
+        if (position.x > ScreenConstants.WIDTH - texture.getRegionWidth()/2){
+            position.x = ScreenConstants.WIDTH - texture.getRegionWidth()/2;
             velocity.x *= -0.8;
         }
         if (position.y < texture.getRegionHeight()/2){
             position.y = texture.getRegionHeight()/2;
             velocity.y *= -0.8;
         }
-        if (position.y > ScreenManager.SCREEN_HEIGHT - texture.getRegionHeight()/2){
-            position.y = ScreenManager.SCREEN_HEIGHT - texture.getRegionHeight()/2;
+        if (position.y > ScreenConstants.HEIGHT - texture.getRegionHeight()/2){
+            position.y = ScreenConstants.HEIGHT - texture.getRegionHeight()/2;
             velocity.y *= -0.8;
         }
     }
-
-    private void checkPressedKeys(float dt){
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            angle += dt * 180;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            angle -= dt * 180;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            velocity.x += MathUtils.cosDeg(angle) * POWER_SHIP * dt;
-            velocity.y += MathUtils.sinDeg(angle) * POWER_SHIP * dt;
-            showEngineEffects(angle + 180);
-
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            velocity.x += -MathUtils.cosDeg(angle) * (POWER_SHIP / 2) * dt;
-            velocity.y += -MathUtils.sinDeg(angle) * (POWER_SHIP / 2) * dt;
-            showEngineEffects(angle - 90);
-            showEngineEffects(angle + 90);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-            shoot();
-        }
-    }
-
 
     public int takeDamage(int damage){
         return hp -= damage;
@@ -170,19 +142,6 @@ public class Hero {
         return angle;
     }
 
-    public void showEngineEffects(float angleEngine) {
-        float bx = position.x + MathUtils.cosDeg(angleEngine) * 25;
-        float by = position.y + MathUtils.sinDeg(angleEngine) * 25;
-
-        for (int i = 0; i < 3; i++) {
-            particleManager.setup(bx + MathUtils.random(-4, 4), by + MathUtils.random(-4, 4),
-                    velocity.x * 0.1f + MathUtils.random(-20, 20), velocity.y * 0.1f + MathUtils.random(-20, 20),
-                    0.2f,
-                    1.2f, 0.2f,
-                    1.0f, 0.5f, 0.0f, 1.0f,
-                    1.0f, 1.0f, 1.0f, 0.0f);
-        }
-    }
     public Circle getHitArea() {
         return hitArea;
     }
@@ -194,5 +153,17 @@ public class Hero {
 
     public int getAmountBullets(){
         return weapons[0].quantityBullets;
+    }
+
+    public void setPosition(Vector2 position) {
+        this.position = position;
+    }
+
+    public void setVelocity(Vector2 velocity) {
+        this.velocity = velocity;
+    }
+
+    public void setAngle(float angle) {
+        this.angle = angle;
     }
 }

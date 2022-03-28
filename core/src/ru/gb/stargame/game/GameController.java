@@ -39,7 +39,7 @@ public class GameController {
         bulletManager.update(dt);
         asteroidManager.update(dt);
         particleManager.update(dt);
-        bonusItemManager.update();
+        bonusItemManager.update(dt);
         player.update(dt);
         checkCollisionWithAsteroids();
         checkHitting();
@@ -95,6 +95,7 @@ public class GameController {
                     b.deactivate();
                     if (a.takeDamage(b.getDamage()) <= 0){
                         a.deactivate();
+                        player.incrementDestroyedAsteroid();
                         if (a.getScale() > 0.5f) {
                             asteroidManager.generatePartsAsteroid(a);
                         } else if (countRenders % 5 == 0) {
@@ -130,7 +131,7 @@ public class GameController {
                         player.getHero().addBullets(BonusConstants.MEDIUM_BULLETS);
                         break;
                 }
-                System.out.println("After switch() - " + bonus.getType());
+                particleManager.takePowerUpsEffect(bonus);
                 bonus.deactivate();
             }
         }
@@ -147,4 +148,5 @@ public class GameController {
     public BonusItemManager getBonusItemManager() {
         return bonusItemManager;
     }
+
 }

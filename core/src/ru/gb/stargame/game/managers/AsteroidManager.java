@@ -7,8 +7,8 @@ import ru.gb.stargame.game.entities.Asteroid;
 import ru.gb.stargame.game.helpers.ObjectPool;
 
 import static ru.gb.stargame.game.constants.AsteroidConstants.*;
-import static ru.gb.stargame.screen.ScreenManager.SCREEN_HEIGHT;
-import static ru.gb.stargame.screen.ScreenManager.SCREEN_WIDTH;
+import static ru.gb.stargame.game.constants.ScreenConstants.HEIGHT;
+import static ru.gb.stargame.game.constants.ScreenConstants.WIDTH;
 
 public class AsteroidManager extends ObjectPool<Asteroid> {
     private final TextureRegion texture;
@@ -35,17 +35,17 @@ public class AsteroidManager extends ObjectPool<Asteroid> {
     }
 
     private void checkBorders(Asteroid asteroid) {
-        if (asteroid.getPosition().x > SCREEN_WIDTH + texture.getRegionWidth()/2 + 10){
+        if (asteroid.getPosition().x > WIDTH + texture.getRegionWidth()/2 + 10){
             asteroid.getPosition().x = -texture.getRegionWidth()/2;
         }
         if (asteroid.getPosition().x < -texture.getRegionWidth()/2 - 10){
-            asteroid.getPosition().x = SCREEN_WIDTH + texture.getRegionWidth()/2;
+            asteroid.getPosition().x = WIDTH + texture.getRegionWidth()/2;
         }
-        if (asteroid.getPosition().y > SCREEN_HEIGHT + texture.getRegionHeight()/2 + 10){
+        if (asteroid.getPosition().y > HEIGHT + texture.getRegionHeight()/2 + 10){
             asteroid.getPosition().y = -texture.getRegionHeight()/2;
         }
         if (asteroid.getPosition().y < -texture.getRegionHeight()/2 - 10){
-            asteroid.getPosition().y = SCREEN_HEIGHT + texture.getRegionHeight()/2;
+            asteroid.getPosition().y = HEIGHT + texture.getRegionHeight()/2;
         }
     }
 
@@ -53,8 +53,8 @@ public class AsteroidManager extends ObjectPool<Asteroid> {
         float scale = MathUtils.random(0.6f, 1.1f);
 
         getActiveElement().activate(
-            MathUtils.random(0, SCREEN_WIDTH),
-            MathUtils.random(0, SCREEN_WIDTH),
+            MathUtils.random(0, WIDTH),
+            MathUtils.random(0, WIDTH),
             MathUtils.random(MIN_SPEED, MAX_SPEED),
             MathUtils.random(MIN_SPEED, MAX_SPEED),
             scale, scale * texture.getRegionWidth()/2 - 10);
