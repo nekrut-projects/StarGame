@@ -14,7 +14,6 @@ import static ru.gb.stargame.game.constants.WeaponConstants.START_QUANTITY_BULLE
 
 public class Hero {
     private TextureRegion texture;
-    private ParticleManager particleManager;
     private Vector2 position;
     private Vector2 velocity;
     private float angle;
@@ -23,6 +22,8 @@ public class Hero {
     private Circle hitArea;
     private int hp;
     private Weapon[] weapons;
+    private int magnetismLevel;
+    private Circle magneticArea;
 
     public void addWeapon() {
         for (int i = 0; i < weapons.length; i++) {
@@ -71,7 +72,6 @@ public class Hero {
             new Weapon(new Vector2(28, -90), -10, false)
         };
         this.bulletManager = bulletRepository;
-        this.particleManager = particleManager;
         this.velocity = new Vector2(0, 0);
         this.texture = texture;
         this.position = new Vector2(ScreenConstants.WIDTH / 2, ScreenConstants.HEIGHT / 2);
@@ -79,12 +79,15 @@ public class Hero {
         this.fireTime = 0.0f;
         this.hp = MAX_HP;
         this.hitArea = new Circle(position,texture.getRegionWidth()/2 -5);
+        this.magnetismLevel = 2;
+        this.magneticArea = new Circle(hitArea);
     }
 
     public void update(float dt){
         fireTime += dt;
-        hitArea.setPosition(position);
         position.mulAdd(velocity, dt);
+        hitArea.setPosition(position);
+        magneticArea.set(position, hitArea.radius * magnetismLevel);
 
         float stopCoeff = 1.0f - dt;
         if (stopCoeff < 0f){
@@ -165,5 +168,18 @@ public class Hero {
 
     public void setAngle(float angle) {
         this.angle = angle;
+    }
+
+    public int getMagnetismLevel() {
+        return magnetismLevel;
+    }
+
+    public Circle getMagneticArea() {
+        return magneticArea;
+    }
+
+    public void increaseMagnetismLevel(){
+        magnetismLevel++;
+        magneticArea.setRadius(magneticArea.radius * magnetismLevel);
     }
 }

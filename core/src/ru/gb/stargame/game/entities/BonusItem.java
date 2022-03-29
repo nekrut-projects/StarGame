@@ -67,4 +67,8 @@ public class BonusItem implements Poolable {
     public float getLifetime() {
         return lifetime;
     }
+
+    public Vector2 getVelocity() {
+        return velocity;
+    }
 }

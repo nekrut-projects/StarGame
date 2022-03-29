@@ -21,6 +21,7 @@ public class GameController {
     private final TextureAtlas atlas;
     private Vector2 tempVec;
     private int countRenders = 0;
+    private int difficultyLevel;
 
     public GameController() {
         this.atlas = Assets.getInstance().getAtlas();
@@ -31,6 +32,7 @@ public class GameController {
         this.asteroidManager = new AsteroidManager(atlas.findRegion("asteroid"));
         this.player = new Player(atlas.findRegion("ship"), bulletManager, particleManager);
         this.bonusItemManager = new BonusItemManager();
+        this.difficultyLevel = 1;
     }
 
     public void update(float dt){
@@ -116,6 +118,10 @@ public class GameController {
     public void checkCollisionWithBonus(){
         for (int i = 0; i < bonusItemManager.getActiveList().size(); i++) {
             BonusItem bonus = bonusItemManager.getActiveList().get(i);
+            if (bonus.getHitArea().overlaps(player.getHero().getMagneticArea())){
+                tempVec.set(player.getHero().getPosition()).sub(bonus.getPosition()).nor();
+                bonus.getVelocity().mulAdd(tempVec, 100);
+            }
             if (bonus.getHitArea().overlaps(player.getHero().getHitArea())){
                 switch (bonus.getType()){
                     case COINS:

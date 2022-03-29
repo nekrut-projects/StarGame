@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.ScreenUtils;
 import ru.gb.stargame.game.constants.HeroConstants;
+import ru.gb.stargame.game.constants.ScreenConstants;
 import ru.gb.stargame.game.entities.*;
 import ru.gb.stargame.game.managers.ParticleManager;
 import ru.gb.stargame.screen.utils.Assets;
@@ -50,8 +51,6 @@ public class GameRenderer {
         this.textureAddWeapon = atlas.findRegion("levelup");
     }
     public void render () {
-        ScreenUtils.clear(0, 0, 0.5f, 1f);
-        batch.begin();
             renderBackground();
             renderBullets();
             renderShipHero();
@@ -59,7 +58,6 @@ public class GameRenderer {
             renderBonusItems();
             renderAsteroids();
             renderGUI();
-        batch.end();
     }
 
     private void renderBackground(){
@@ -184,6 +182,10 @@ public class GameRenderer {
                 .append(HeroConstants.MAX_HP).append("\n");
         sb.append("BULLETS: ").append(gc.getPlayer().getHero().getAmountBullets()).append("\n");
         font32.draw(batch, sb, 20, 700);
+    }
+
+    public void showLevelNumber(int level){
+        font32.draw(batch, "Level " + level, ScreenConstants.WIDTH/2, ScreenConstants.HEIGHT/2);
     }
 
     public float lerp(float value1, float value2, float point) {

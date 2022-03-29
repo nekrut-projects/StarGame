@@ -79,9 +79,12 @@ public class GameOverScreen extends AbstractScreen{
                 .getGameController().getPlayer();
         font32.draw(getBatch(), "Statistics:", WIDTH/2 - 120, HEIGHT - 250);
 
-        font24.draw(getBatch(),"received coins: " + p.getCoins(), WIDTH/2 - 100,HEIGHT - 300);
-        font24.draw(getBatch(),"received score: " + p.getScoreView(), WIDTH/2 - 100,HEIGHT - 340);
-        font24.draw(getBatch(),"destroyed asteroid: " + p.getDestroyedAsteroid(), WIDTH/2 - 100,HEIGHT - 380);
+        StringBuilder sb = new StringBuilder();
+        sb.append("received coins: ").append(p.getCoins()).append("\n");
+        sb.append("received score: ").append(p.getScoreView()).append("\n");
+        sb.append("destroyed asteroid: ").append(p.getDestroyedAsteroid()).append("\n");
+
+        font24.draw(getBatch(),sb, WIDTH/2 - 100,HEIGHT - 300);
     }
 
     @Override
