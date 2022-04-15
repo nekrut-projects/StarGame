@@ -1,7 +1,5 @@
 package ru.gb.stargame.game.entities;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import ru.gb.stargame.game.GameController;
@@ -46,16 +44,12 @@ public class Background {
             return scale;
         }
     }
-    private Texture textureCosmos;
-    private TextureRegion textureStar;
 
     private Star[] stars;
 
 
     public Background(GameController gc) {
         this.gc = gc;
-        this.textureCosmos = new Texture("images/bg.png");
-        this.textureStar = gc.getAtlas().findRegion("star16");
         this.stars = new Star[STARS_COUNT];
         for (int i = 0; i < stars.length; i++) {
             stars[i] = new Star();

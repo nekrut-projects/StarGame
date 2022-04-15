@@ -1,13 +1,13 @@
 package ru.gb.stargame.game.managers;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.MathUtils;
-import ru.gb.stargame.game.entities.BonusItem;
-import ru.gb.stargame.game.entities.Bullet;
-import ru.gb.stargame.game.entities.Hero;
-import ru.gb.stargame.game.entities.Particle;
+import com.badlogic.gdx.math.Vector2;
+import ru.gb.stargame.game.entities.*;
 import ru.gb.stargame.game.helpers.ObjectPool;
+import ru.gb.stargame.screen.utils.Assets;
 
-public class ParticleManager extends ObjectPool<Particle> {
+public class ParticlesManager extends ObjectPool<Particle> {
     public class EffectBuilder {
         public void buildMonsterSplash(float x, float y) {
             for (int i = 0; i < 15; i++) {
@@ -19,13 +19,15 @@ public class ParticleManager extends ObjectPool<Particle> {
     }
 
     private EffectBuilder effectBuilder;
+//    private InfoMessageManager infoMessageManager;
 
     public EffectBuilder getEffectBuilder() {
         return effectBuilder;
     }
 
-    public ParticleManager() {
+    public ParticlesManager() {
         this.effectBuilder = new EffectBuilder();
+//        this.infoMessageManager = new InfoMessageManager();
     }
 
     @Override
@@ -108,4 +110,7 @@ public class ParticleManager extends ObjectPool<Particle> {
                     r1, g1, b1, a1, r2, g2, b2, a2);
         }
     }
+
+
+
 }

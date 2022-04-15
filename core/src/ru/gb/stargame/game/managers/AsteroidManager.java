@@ -3,6 +3,7 @@ package ru.gb.stargame.game.managers;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import ru.gb.stargame.game.constants.AsteroidConstants;
 import ru.gb.stargame.game.entities.Asteroid;
 import ru.gb.stargame.game.helpers.ObjectPool;
 
@@ -16,9 +17,9 @@ public class AsteroidManager extends ObjectPool<Asteroid> {
 
     public AsteroidManager(TextureAtlas.AtlasRegion texture) {
         this.texture = texture;
-        generateAsteroid();
-        generateAsteroid();
-        generateAsteroid();
+        for (int i = 0; i < 3; i++) {
+            generateAsteroid(HP_MAX);
+        }
     }
 
     @Override
@@ -49,23 +50,25 @@ public class AsteroidManager extends ObjectPool<Asteroid> {
         }
     }
 
-    public void generateAsteroid() {
+    public Asteroid generateAsteroid(int hp) {
         float scale = MathUtils.random(0.6f, 1.1f);
 
-        getActiveElement().activate(
+        Asteroid a = getActiveElement();
+        a.activate(
             MathUtils.random(0, WIDTH),
             MathUtils.random(0, WIDTH),
             MathUtils.random(MIN_SPEED, MAX_SPEED),
             MathUtils.random(MIN_SPEED, MAX_SPEED),
-            scale, scale * texture.getRegionWidth()/2 - 10);
+            scale, scale * texture.getRegionWidth()/2 - 10, hp);
+        return a;
     }
 
-    public void generatePartsAsteroid(Asteroid asteroid) {
+    public void generatePartsAsteroid(Asteroid asteroid, int hp) {
         float scale = asteroid.getScale() - 0.3f;
         for (int i = 0; i < 3; i++) {
             getActiveElement().activate(asteroid.getPosition().x, asteroid.getPosition().y,
                     MathUtils.random(-150, 150), MathUtils.random(-150, 150),
-                    scale, texture.getRegionWidth()/2 * scale - 10);
+                    scale, texture.getRegionWidth()/2 * scale - 10, hp);
         }
     }
 }

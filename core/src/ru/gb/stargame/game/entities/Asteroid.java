@@ -58,7 +58,7 @@ public class Asteroid implements Poolable {
         this.active = false;
     }
 
-    public void activate(float x, float y, float vx, float vy, float scale, float radius) {
+    public void activate(float x, float y, float vx, float vy, float scale, float radius, int hp) {
         active = true;
         position.set(x, y);
         velocity.set(vx, vy);
@@ -67,7 +67,7 @@ public class Asteroid implements Poolable {
         rotationSpeed = MathUtils.random(-180.0f, 180.0f);
         hitArea.setPosition(x, y);
         this.scale = scale;
-        hp = (int) (AsteroidConstants.HP_MAX * scale);
+        this.hp = (int) (hp * scale);
         hitArea.setRadius(radius);
     }
 
@@ -81,5 +81,13 @@ public class Asteroid implements Poolable {
 
     public float getAngle() {
         return angle;
+    }
+
+    public int getHp() {
+        return hp;
+    }
+
+    public void setHp(int hp) {
+        this.hp = hp;
     }
 }

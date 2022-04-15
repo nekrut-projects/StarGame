@@ -9,11 +9,9 @@ import static ru.gb.stargame.game.constants.ScreenConstants.WIDTH;
 
 public class BulletManager extends ObjectPool<Bullet> {
     private final TextureRegion texture;
-    private ParticleManager particleManager;
 
-    public BulletManager(TextureRegion texture, ParticleManager particleManager) {
+    public BulletManager(TextureRegion texture) {
         this.texture = texture;
-        this.particleManager = particleManager;
     }
 
     @Override
@@ -26,9 +24,10 @@ public class BulletManager extends ObjectPool<Bullet> {
     }
 
     public void update(float dt) {
-        for (Bullet b : activeList){
+        Bullet b;
+        for (int i = 0; i < activeList.size(); i++) {
+            b = activeList.get(i);
             b.update(dt);
-            particleManager.showBulletEffect(b);
             checkBorders(b);
         }
         checkPool();

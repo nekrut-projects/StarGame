@@ -6,7 +6,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import ru.gb.stargame.game.constants.ScreenConstants;
 import ru.gb.stargame.game.managers.BulletManager;
-import ru.gb.stargame.game.managers.ParticleManager;
 
 import static ru.gb.stargame.game.constants.BulletConstants.*;
 import static ru.gb.stargame.game.constants.HeroConstants.*;
@@ -22,10 +21,11 @@ public class Hero {
     private Circle hitArea;
     private int hp;
     private Weapon[] weapons;
-    private int magnetismLevel;
+//    private int magnetismLevel;
     private Circle magneticArea;
+    private int quantityBullets;
 
-    public void addWeapon() {
+    public void upgradeWeapon() {
         for (int i = 0; i < weapons.length; i++) {
             if (!weapons[i].active){
                 weapons[i].active = true;
@@ -38,7 +38,7 @@ public class Hero {
     }
 
     private class Weapon {
-        private int quantityBullets;
+//        private int quantityBullets;
         private Vector2 coordOnShip;
         private int angleAttack;
         private boolean active;
@@ -47,7 +47,7 @@ public class Hero {
             this.active = active;
             this.coordOnShip = coordOnShip;
             this.angleAttack = angleAttack;
-            this.quantityBullets = START_QUANTITY_BULLETS;
+//            this.quantityBullets = START_QUANTITY_BULLETS;
         }
 
         public void fire() {
@@ -65,12 +65,13 @@ public class Hero {
         }
     }
 
-    public Hero(TextureRegion texture, BulletManager bulletRepository, ParticleManager particleManager) {
+    public Hero(TextureRegion texture, BulletManager bulletRepository) {
         this.weapons = new Weapon[]{
             new Weapon(new Vector2(28, 0), 0, true),
             new Weapon(new Vector2(28, 90), 10, false),
             new Weapon(new Vector2(28, -90), -10, false)
         };
+        this.quantityBullets = START_QUANTITY_BULLETS;
         this.bulletManager = bulletRepository;
         this.velocity = new Vector2(0, 0);
         this.texture = texture;
@@ -79,7 +80,6 @@ public class Hero {
         this.fireTime = 0.0f;
         this.hp = MAX_HP;
         this.hitArea = new Circle(position,texture.getRegionWidth()/2 -5);
-        this.magnetismLevel = 2;
         this.magneticArea = new Circle(hitArea);
     }
 
@@ -87,7 +87,7 @@ public class Hero {
         fireTime += dt;
         position.mulAdd(velocity, dt);
         hitArea.setPosition(position);
-        magneticArea.set(position, hitArea.radius * magnetismLevel);
+        magneticArea.setPosition(position);
 
         float stopCoeff = 1.0f - dt;
         if (stopCoeff < 0f){
@@ -148,14 +148,13 @@ public class Hero {
     public Circle getHitArea() {
         return hitArea;
     }
+
     public void addBullets(int bullets){
-        for (int i = 0; i < weapons.length; i++) {
-            weapons[i].quantityBullets += bullets;
-        }
+        this.quantityBullets += bullets;
     }
 
     public int getAmountBullets(){
-        return weapons[0].quantityBullets;
+        return quantityBullets;
     }
 
     public void setPosition(Vector2 position) {
@@ -170,16 +169,7 @@ public class Hero {
         this.angle = angle;
     }
 
-    public int getMagnetismLevel() {
-        return magnetismLevel;
-    }
-
     public Circle getMagneticArea() {
         return magneticArea;
-    }
-
-    public void increaseMagnetismLevel(){
-        magnetismLevel++;
-        magneticArea.setRadius(magneticArea.radius * magnetismLevel);
     }
 }

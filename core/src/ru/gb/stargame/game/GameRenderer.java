@@ -7,17 +7,18 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.utils.ScreenUtils;
 import ru.gb.stargame.game.constants.HeroConstants;
 import ru.gb.stargame.game.constants.ScreenConstants;
 import ru.gb.stargame.game.entities.*;
-import ru.gb.stargame.game.managers.ParticleManager;
+import ru.gb.stargame.game.managers.InfoMessageManager;
+import ru.gb.stargame.game.managers.ParticlesManager;
 import ru.gb.stargame.screen.utils.Assets;
 
 public class GameRenderer {
     private GameController gc;
     private SpriteBatch batch;
     private BitmapFont font32;
+    private BitmapFont font24;
     private Texture textureCosmos;
     private TextureRegion textureStar;
     private TextureRegion textureBullet;
@@ -34,6 +35,7 @@ public class GameRenderer {
         initTextures();
         this.gc = gc;
         this.batch = batch;
+        this.font24 = Assets.getInstance().getAssetManager().get("fonts/font24.ttf", BitmapFont.class);
         this.font32 = Assets.getInstance().getAssetManager().get("fonts/font32.ttf", BitmapFont.class);
         this.sb = new StringBuilder();
     }
@@ -56,6 +58,7 @@ public class GameRenderer {
             renderShipHero();
             renderParticles();
             renderBonusItems();
+            renderInfoMessages();
             renderAsteroids();
             renderGUI();
     }
@@ -111,7 +114,7 @@ public class GameRenderer {
     public void renderParticles() {
         TextureRegion textureParticle = textureStar;
         batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        ParticleManager pm = gc.getParticleManager();
+        ParticlesManager pm = gc.getEffectsController().getParticlesManager();
         for (int i = 0; i < pm.getActiveList().size(); i++) {
             Particle p = pm.getActiveList().get(i);
             float t = p.getTime() / p.getTimeMax();
@@ -174,6 +177,15 @@ public class GameRenderer {
 
     }
 
+    private void renderInfoMessages(){
+        InfoMessageManager imm = gc.getEffectsController().getInfoMessageManager();
+        for (int i = 0; i < imm.getActiveList().size(); i++) {
+            InfoMessage message = imm.getActiveList().get(i);
+            font24.setColor(message.getColor());
+            font24.draw(batch, message.getText(), message.getPosition().x, message.getPosition().y);
+        }
+    }
+
     private void renderGUI() {
         sb.setLength(0);
         sb.append("SCORE: ").append(gc.getPlayer().getScoreView()).append("\n");
@@ -181,6 +193,7 @@ public class GameRenderer {
         sb.append("HP: ").append(gc.getPlayer().getHero().getHp()).append(" / ")
                 .append(HeroConstants.MAX_HP).append("\n");
         sb.append("BULLETS: ").append(gc.getPlayer().getHero().getAmountBullets()).append("\n");
+        sb.append("MAGNETISM LV.: ").append(gc.getPlayer().getMagnetismLevel());
         font32.draw(batch, sb, 20, 700);
     }
 
@@ -190,5 +203,9 @@ public class GameRenderer {
 
     public float lerp(float value1, float value2, float point) {
         return value1 + (value2 - value1) * point;
+    }
+
+    public void dispose(){
+        textureCosmos.dispose();
     }
 }
