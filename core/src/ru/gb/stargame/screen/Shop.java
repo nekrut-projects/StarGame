@@ -96,13 +96,6 @@ public class Shop{
             }
         });
 
-
-//        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
-//        textButtonStyle.up = skin.getDrawable("baybtn");
-//        textButtonStyle.font = font24;
-//        skin.add("bayBtnSkin", textButtonStyle);
-
-
         this.group.addActor(btnClose);
         this.group.addActor(btnBayHp);
         this.group.addActor(btnBayBullets);

@@ -18,6 +18,7 @@ import static ru.gb.stargame.game.constants.InfoMessagesConstants.*;
 public class GameController {
     private Background background;
     private Player player;
+    private Bot bot;
     private BonusItemManager bonusItemManager;
     private AsteroidManager asteroidManager;
     private BulletManager bulletManager;
@@ -37,6 +38,7 @@ public class GameController {
         this.bulletManager = new BulletManager(atlas.findRegion("bullet"));
         this.asteroidManager = new AsteroidManager(atlas.findRegion("asteroid"));
         this.player = new Player(atlas.findRegion("ship"), bulletManager);
+        this.bot = new Bot(atlas.findRegion("bot"), bulletManager);
         this.bonusItemManager = new BonusItemManager();
     }
 
@@ -57,9 +59,10 @@ public class GameController {
     public EffectsController getEffectsController() {
         return effectsController;
     }
-//    public ParticlesManager getParticleManager() {
-//        return particlesManager;
-//    }
+
+    public Bot getBot() {
+        return bot;
+    }
 
     public Background getBackground() {
         return background;

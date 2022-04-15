@@ -101,7 +101,6 @@ public class GameScreen extends AbstractScreen {
     public void dispose() {
         gr.dispose();
         shop.dispose();
-        music.dispose();
     }
 
     public void activate() {

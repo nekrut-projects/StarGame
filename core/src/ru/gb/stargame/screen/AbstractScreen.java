@@ -1,11 +1,13 @@
 package ru.gb.stargame.screen;
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import ru.gb.stargame.game.constants.ScreenConstants;
+import ru.gb.stargame.screen.utils.Assets;
 
 public abstract class AbstractScreen implements Screen {
     private SpriteBatch batch;

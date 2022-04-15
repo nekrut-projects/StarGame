@@ -52,37 +52,44 @@ ship
   orig: 64, 64
   offset: 0, 0
   index: -1
-addbullets
+bot
   rotate: false
   xy: 434, 88
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-levelup
+addbullets
   rotate: false
   xy: 342, 163
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+levelup
+  rotate: false
+  xy: 408, 163
   size: 59, 54
   orig: 59, 54
   offset: 0, 0
   index: -1
 close
   rotate: false
-  xy: 403, 163
+  xy: 2, 342
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 smButton
   rotate: false
-  xy: 2, 342
+  xy: 52, 342
   size: 120, 32
   orig: 120, 32
   offset: 0, 0
   index: -1
 bullet
   rotate: false
-  xy: 342, 219
+  xy: 408, 219
   size: 32, 32
   orig: 32, 32
   offset: 0, 0

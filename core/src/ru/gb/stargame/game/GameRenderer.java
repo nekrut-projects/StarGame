@@ -28,6 +28,7 @@ public class GameRenderer {
     private TextureRegion textureAddBullets;
     private TextureRegion textureAddWeapon;
     private TextureRegion textureCoins;
+    private TextureRegion textureBot;
 
     private StringBuilder sb;
 
@@ -48,6 +49,7 @@ public class GameRenderer {
         this.textureAsteroid = atlas.findRegion("asteroid");
         this.textureBullet = atlas.findRegion("bullet");
         this.textureShip = atlas.findRegion("ship");
+        this.textureBot = atlas.findRegion("bot");
         this.textureMedicine = atlas.findRegion("medicine");
         this.textureAddBullets = atlas.findRegion("addbullets");
         this.textureAddWeapon = atlas.findRegion("levelup");
@@ -55,7 +57,8 @@ public class GameRenderer {
     public void render () {
             renderBackground();
             renderBullets();
-            renderShipHero();
+            renderShip(gc.getPlayer().getHero(), textureShip);
+            renderShip(gc.getBot().getShip(), textureBot);
             renderParticles();
             renderBonusItems();
             renderInfoMessages();
@@ -102,13 +105,12 @@ public class GameRenderer {
         }
     }
 
-    private void renderShipHero() {
-        Hero h = gc.getPlayer().getHero();
-        batch.draw(textureShip, h.getPosition().x - textureShip.getRegionWidth()/2,
-                h.getPosition().y - textureShip.getRegionHeight()/2,
-                textureShip.getRegionWidth()/2, textureShip.getRegionHeight()/2,
-                textureShip.getRegionWidth(), textureShip.getRegionHeight(),
-                1, 1, h.getAngle());
+    private void renderShip(Ship ship, TextureRegion texture) {
+        batch.draw(texture, ship.getPosition().x - texture.getRegionWidth()/2,
+                ship.getPosition().y - texture.getRegionHeight()/2,
+                texture.getRegionWidth()/2, texture.getRegionHeight()/2,
+                texture.getRegionWidth(), texture.getRegionHeight(),
+                1, 1, ship.getAngle());
     }
 
     public void renderParticles() {

@@ -14,22 +14,18 @@ public class Player {
     private int difficulty;
     private int magnetismLevel;
 
-//    private EffectsManager effectsManager;
-
     public Player(TextureRegion texture, BulletManager bulletManager) {
         this.hero = new Hero(texture, bulletManager);
         this.score = 0;
         this.scoreView = 0;
         this.coins = 0;
         this.destroyedAsteroid = 0;
-//        this.effectsManager = effectsManager;
         this.difficulty = 1;
         this.remainsDestroy = AsteroidConstants.NEEDED_DESTROY_ASTEROIDS_ON_LEVEL;
         this.magnetismLevel = 2;
     }
 
     public void update(float dt) {
-//        checkPressedKeys(dt);
         hero.getMagneticArea().setRadius(hero.getHitArea().radius * magnetismLevel);
         hero.update(dt);
         if (scoreView < score) {
@@ -68,37 +64,9 @@ public class Player {
         return coins;
     }
 
-//    private void checkPressedKeys(float dt){
-//        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-//            hero.setAngle(hero.getAngle() + dt * 180);
-//        }
-//        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-//            hero.setAngle(hero.getAngle() - dt * 180);
-//        }
-//        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-//            hero.getVelocity().x += MathUtils.cosDeg(hero.getAngle()) * POWER_SHIP * dt;
-//            hero.getVelocity().y += MathUtils.sinDeg(hero.getAngle()) * POWER_SHIP * dt;
-//            effectsManager.showEngineEffects(hero, 180);
-//
-//        }
-//        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-//            hero.getVelocity().x += -MathUtils.cosDeg(hero.getAngle()) * POWER_SHIP/2 * dt;
-//            hero.getVelocity().y += -MathUtils.sinDeg(hero.getAngle()) * POWER_SHIP/2 * dt;
-//            effectsManager.showEngineEffects(hero, - 90);
-//            effectsManager.showEngineEffects(hero, 90);
-//        }
-//        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-//            hero.shoot();
-//        }
-//    }
-
     public int getRemainsDestroy() {
         return remainsDestroy;
     }
-
-//    public void setRemainsDestroy(int remainsDestroy) {
-//        this.remainsDestroy = remainsDestroy;
-//    }
 
     public void reduceNumberAsteroids(){
         this.remainsDestroy--;
@@ -112,10 +80,6 @@ public class Player {
     public int getDifficulty() {
         return difficulty;
     }
-
-//    public void resetRemainsDestroyedAsteroids() {
-//        this.remainsDestroy = AsteroidConstants.NEEDED_DESTROY_ASTEROIDS_ON_LEVEL + 10 * difficulty;
-//    }
 
     public boolean reduceCoins(int coins){
         if (this.coins >= coins) {

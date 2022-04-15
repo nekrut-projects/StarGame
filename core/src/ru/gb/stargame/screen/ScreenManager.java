@@ -25,10 +25,6 @@ public class ScreenManager {
         this.game = starGame;
     }
 
-//    public static final int SCREEN_WIDTH = 1280;
-//
-//    public static final int SCREEN_HEIGHT = 720;
-
     private void initScreens(SpriteBatch batch){
         screens.put(GAME, new GameScreen(batch, this));
         screens.put(MAIN_MENU, new MenuScreen(batch, this));
