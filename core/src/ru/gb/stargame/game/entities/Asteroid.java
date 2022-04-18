@@ -8,7 +8,7 @@ import ru.gb.stargame.game.helpers.Poolable;
 
 
 import static ru.gb.stargame.game.constants.AsteroidConstants.*;
-import static ru.gb.stargame.screen.ScreenManager.SCREEN_WIDTH;
+import static ru.gb.stargame.game.constants.ScreenConstants.WIDTH;
 
 public class Asteroid implements Poolable {
     private Vector2 position;
@@ -22,7 +22,7 @@ public class Asteroid implements Poolable {
 
     public Asteroid() {
         this.rotationSpeed = MathUtils.random(-180.0f, 180.0f);
-        this.position = new Vector2(MathUtils.random(-10, SCREEN_WIDTH - 20), -100);
+        this.position = new Vector2(MathUtils.random(-10, WIDTH - 20), -100);
         this.velocity = new Vector2(0, MathUtils.random(MIN_SPEED, MAX_SPEED));
         this.scale = 1.0f;
         this.angle = MathUtils.random( ANGLE, 0);
@@ -58,7 +58,7 @@ public class Asteroid implements Poolable {
         this.active = false;
     }
 
-    public void activate(float x, float y, float vx, float vy, float scale, float radius) {
+    public void activate(float x, float y, float vx, float vy, float scale, float radius, int hp) {
         active = true;
         position.set(x, y);
         velocity.set(vx, vy);
@@ -67,7 +67,7 @@ public class Asteroid implements Poolable {
         rotationSpeed = MathUtils.random(-180.0f, 180.0f);
         hitArea.setPosition(x, y);
         this.scale = scale;
-        hp = (int) (AsteroidConstants.HP_MAX * scale);
+        this.hp = (int) (hp * scale);
         hitArea.setRadius(radius);
     }
 
@@ -81,5 +81,13 @@ public class Asteroid implements Poolable {
 
     public float getAngle() {
         return angle;
+    }
+
+    public int getHp() {
+        return hp;
+    }
+
+    public void setHp(int hp) {
+        this.hp = hp;
     }
 }

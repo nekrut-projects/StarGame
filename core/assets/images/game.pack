@@ -17,44 +17,86 @@ medicine
   orig: 84, 84
   offset: 0, 0
   index: -1
-coins
+simpleButton
+  rotate: false
+  xy: 2, 260
+  size: 320, 80
+  orig: 320, 80
+  offset: 0, 0
+  index: -1
+baybtn
   rotate: false
   xy: 346, 2
+  size: 160, 80
+  orig: 160, 80
+  offset: 0, 0
+  index: -1
+shortButton
+  rotate: false
+  xy: 260, 88
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+coins
+  rotate: false
+  xy: 342, 88
   size: 90, 73
   orig: 90, 73
   offset: 0, 0
   index: -1
 ship
   rotate: false
-  xy: 438, 2
+  xy: 260, 170
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+bot
+  rotate: false
+  xy: 434, 88
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 addbullets
   rotate: false
-  xy: 260, 88
+  xy: 342, 163
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 levelup
   rotate: false
-  xy: 260, 154
+  xy: 408, 163
   size: 59, 54
   orig: 59, 54
   offset: 0, 0
   index: -1
+close
+  rotate: false
+  xy: 2, 342
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
+smButton
+  rotate: false
+  xy: 52, 342
+  size: 120, 32
+  orig: 120, 32
+  offset: 0, 0
+  index: -1
 bullet
   rotate: false
-  xy: 260, 210
+  xy: 408, 219
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 star16
   rotate: false
-  xy: 438, 68
+  xy: 260, 236
   size: 16, 16
   orig: 16, 16
   offset: 0, 0

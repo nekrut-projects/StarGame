@@ -3,6 +3,8 @@ package ru.gb.stargame.screen.utils;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -37,9 +39,23 @@ public class Assets {
         switch (type) {
             case GAME:
                 assetManager.load("images/game.pack", TextureAtlas.class);
+                assetManager.load("audio/mortal.mp3", Music.class);
+                assetManager.load("audio/shoot.mp3", Sound.class);
+                createStandardFont(24);
                 createStandardFont(32);
-                assetManager.finishLoading();
-                textureAtlas = assetManager.get("images/game.pack", TextureAtlas.class);
+                break;
+            case MAIN_MENU:
+                assetManager.load("images/game.pack", TextureAtlas.class);
+                assetManager.load("audio/music.mp3", Music.class);
+                createStandardFont(24);
+                createStandardFont(72);
+                break;
+            case GAME_OVER:
+                assetManager.load("images/game.pack", TextureAtlas.class);
+                assetManager.load("audio/music.mp3", Music.class);
+                createStandardFont(24);
+                createStandardFont(32);
+                createStandardFont(72);
                 break;
         }
     }
@@ -60,5 +76,9 @@ public class Assets {
 
     public void clear() {
         assetManager.clear();
+    }
+
+    public void setAtlas() {
+        this.textureAtlas = assetManager.get("images/game.pack", TextureAtlas.class);
     }
 }
