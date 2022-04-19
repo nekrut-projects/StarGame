@@ -1,5 +1,6 @@
 package ru.gb.stargame.game.entities;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import ru.gb.stargame.game.helpers.Poolable;
 
@@ -84,20 +85,19 @@ public class Particle implements Poolable {
 
     public void init(float x, float y, float vx, float vy,
                      float timeMax, float size1, float size2,
-                     float r1, float g1, float b1, float a1,
-                     float r2, float g2, float b2, float a2) {
+                     Color beginColor, Color endColor) {
         this.position.x = x;
         this.position.y = y;
         this.velocity.x = vx;
         this.velocity.y = vy;
-        this.r1 = r1;
-        this.r2 = r2;
-        this.g1 = g1;
-        this.g2 = g2;
-        this.b1 = b1;
-        this.b2 = b2;
-        this.a1 = a1;
-        this.a2 = a2;
+        this.r1 = beginColor.r;
+        this.r2 = endColor.r;
+        this.g1 = beginColor.g;
+        this.g2 = endColor.g;
+        this.b1 = beginColor.b;
+        this.b2 = endColor.b;
+        this.a1 = beginColor.a;
+        this.a2 = endColor.a;
         this.time = 0.0f;
         this.timeMax = timeMax;
         this.size1 = size1;

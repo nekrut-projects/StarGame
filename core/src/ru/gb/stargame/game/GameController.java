@@ -3,22 +3,24 @@ package ru.gb.stargame.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import ru.gb.stargame.game.constants.AsteroidConstants;
-import ru.gb.stargame.game.constants.InfoMessagesConstants;
+import ru.gb.stargame.game.constants.BulletConstants;
 import ru.gb.stargame.game.entities.*;
 import ru.gb.stargame.game.managers.*;
 import ru.gb.stargame.screen.utils.Assets;
 
+import java.util.List;
+
 import static ru.gb.stargame.game.constants.BonusConstants.*;
-import static ru.gb.stargame.game.constants.HeroConstants.*;
+import static ru.gb.stargame.game.constants.BulletConstants.DAMAGE_SIMPLE_BULLET;
+import static ru.gb.stargame.game.constants.ShipConstants.*;
 import static ru.gb.stargame.game.constants.InfoMessagesConstants.*;
 
 public class GameController {
     private Background background;
     private Player player;
-    private Bot bot;
+    private BotShipManager botShipManager;
     private BonusItemManager bonusItemManager;
     private AsteroidManager asteroidManager;
     private BulletManager bulletManager;
@@ -27,9 +29,11 @@ public class GameController {
     private Vector2 tempVec;
     private int countRenders = 0;
     private StringBuilder tempSB;
+    private int difficulty;
 
 
     public GameController() {
+        this.difficulty = 1;
         this.tempSB = new StringBuilder();
         this.atlas = Assets.getInstance().getAtlas();
         this.tempVec = new Vector2();
@@ -37,8 +41,8 @@ public class GameController {
         this.effectsController = new EffectsController();
         this.bulletManager = new BulletManager(atlas.findRegion("bullet"));
         this.asteroidManager = new AsteroidManager(atlas.findRegion("asteroid"));
-        this.player = new Player(atlas.findRegion("ship"), bulletManager);
-        this.bot = new Bot(atlas.findRegion("bot"), bulletManager);
+        this.player = new Player(bulletManager);
+        this.botShipManager = new BotShipManager(bulletManager, player.getHero().getPosition());
         this.bonusItemManager = new BonusItemManager();
     }
 
@@ -50,6 +54,7 @@ public class GameController {
         effectsController.update(dt);
         bonusItemManager.update(dt);
         player.update(dt);
+        botShipManager.update(dt);
         checkPressedKeys(dt);
         checkCollisionWithAsteroids();
         checkHitting();
@@ -60,8 +65,8 @@ public class GameController {
         return effectsController;
     }
 
-    public Bot getBot() {
-        return bot;
+    public BotShipManager getBotShipManager() {
+        return botShipManager;
     }
 
     public Background getBackground() {
@@ -110,29 +115,58 @@ public class GameController {
         for (int i = 0; i < bulletManager.getActiveList().size(); i++) {
             Bullet b = bulletManager.getActiveList().get(i);
             effectsController.getParticlesManager().showBulletEffect(b);
-            for (int j = 0; j < asteroidManager.getActiveList().size(); j++) {
-                Asteroid a = asteroidManager.getActiveList().get(j);
-                if (a.getHitArea().contains(b.getPosition())){
-                    b.deactivate();
-                    if (a.takeDamage(b.getDamage()) <= 0){
-                        a.deactivate();
+            checkHitInShip(b);
+            checkHitInAsteroid(b);
+        }
+    }
+
+    private void checkHitInAsteroid(Bullet bullet) {
+        for (int j = 0; j < asteroidManager.getActiveList().size(); j++) {
+            Asteroid a = asteroidManager.getActiveList().get(j);
+            if (a.getHitArea().contains(bullet.getPosition())){
+                bullet.deactivate();
+                if (a.takeDamage(bullet.getDamage()) <= 0){
+                    a.deactivate();
+                    int hp = AsteroidConstants.HP_MAX + difficulty * 15;
+                    if (a.getScale() > 0.5f) {
+                        asteroidManager.generatePartsAsteroid(a, hp);
+                    } else if (countRenders % 5 == 0) {
+                        countRenders = 0;
+                        asteroidManager.generateAsteroid(hp);
+                    }
+                    if (countRenders % 7 == 0){
+                        bonusItemManager.generateBonus(a.getPosition());
+                    }
+                    if (bullet.getOwner() == BulletConstants.OwnerBullet.PLAYER) {
                         player.incrementDestroyedAsteroid();
                         player.reduceNumberAsteroids();
-                        int hp = AsteroidConstants.HP_MAX + player.getDifficulty() * 15;
-                        if (a.getScale() > 0.5f) {
-                            asteroidManager.generatePartsAsteroid(a, hp);
-                        } else if (countRenders % 5 == 0) {
-                            countRenders = 0;
-                            asteroidManager.generateAsteroid(hp);
-                        }
-                        if (countRenders % 7 == 0){
-                            bonusItemManager.generateBonus(a.getPosition());
-                        }
                         player.addScore(POINTS_FOR_DESTROYING_ASTEROID);
                     }
-                    break;
                 }
+                break;
             }
+        }
+    }
+
+    private void checkHitInShip(Bullet bullet) {
+        switch (bullet.getOwner()){
+            case BOT:
+                if (player.getHero().getHitArea().contains(bullet.getPosition())){
+                    player.getHero().takeDamage(bullet.getDamage());
+                    bullet.deactivate();
+                }
+                break;
+            case PLAYER:
+                List<BotShip> botShips = botShipManager.getActiveList();
+                for (int i = 0; i < botShips.size(); i++) {
+                    if (botShips.get(i).getHp() <= 0){
+                        botShips.get(i).deactivate();
+                    }
+                    if (botShips.get(i).getHitArea().contains(bullet.getPosition())){
+                        botShips.get(i).takeDamage(bullet.getDamage());
+                    }
+                }
+                break;
         }
     }
 
@@ -178,6 +212,31 @@ public class GameController {
         }
     }
 
+    private void checkPressedKeys(float dt){
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            player.getHero().setAngle(player.getHero().getAngle() + dt * 180);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            player.getHero().setAngle(player.getHero().getAngle() - dt * 180);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            player.getHero().accelerate(dt);
+            effectsController.getParticlesManager().showEngineEffects(player.getHero(), 180);
+
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            player.getHero().reverseCourse(dt);
+            effectsController.getParticlesManager().showEngineEffects(player.getHero(), - 90);
+            effectsController.getParticlesManager().showEngineEffects(player.getHero(), 90);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            player.getHero().shoot(BulletConstants.OwnerBullet.PLAYER, DAMAGE_SIMPLE_BULLET);
+            if (player.getHero().getAmountBullets() > 0) {
+                effectsController.playSoundShoot();
+            }
+        }
+    }
+
     public Player getPlayer() {
         return player;
     }
@@ -190,31 +249,12 @@ public class GameController {
         return bonusItemManager;
     }
 
-    private void checkPressedKeys(float dt){
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            player.getHero().setAngle(player.getHero().getAngle() + dt * 180);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            player.getHero().setAngle(player.getHero().getAngle() - dt * 180);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            player.getHero().getVelocity().x += MathUtils.cosDeg(player.getHero().getAngle()) * POWER_SHIP * dt;
-            player.getHero().getVelocity().y += MathUtils.sinDeg(player.getHero().getAngle()) * POWER_SHIP * dt;
-            effectsController.getParticlesManager().showEngineEffects(player.getHero(), 180);
-
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            player.getHero().getVelocity().x += -MathUtils.cosDeg(player.getHero().getAngle()) * POWER_SHIP/2 * dt;
-            player.getHero().getVelocity().y += -MathUtils.sinDeg(player.getHero().getAngle()) * POWER_SHIP/2 * dt;
-            effectsController.getParticlesManager().showEngineEffects(player.getHero(), - 90);
-            effectsController.getParticlesManager().showEngineEffects(player.getHero(), 90);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-            player.getHero().shoot();
-            if (player.getHero().getAmountBullets() > 0) {
-                effectsController.playSoundShoot();
-            }
-        }
+    public void increaseDifficulty(){
+        this.difficulty++;
+        player.resetCountAsteroid(difficulty);
     }
 
+    public int getDifficulty() {
+        return difficulty;
+    }
 }

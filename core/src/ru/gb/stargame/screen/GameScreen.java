@@ -25,7 +25,6 @@ public class GameScreen extends AbstractScreen {
     private boolean active;
     private Shop shop;
     private float timer;
-    private Music music;
 
     public GameScreen(SpriteBatch batch, ScreenManager screenManager) {
         super(batch);
@@ -40,22 +39,21 @@ public class GameScreen extends AbstractScreen {
         gc = new GameController();
         gr = new GameRenderer(gc, getBatch());
         this.shop = new Shop(getViewport(), getBatch(), this);
-        this.music = Assets.getInstance().getAssetManager().get("audio/mortal.mp3");
-        music.setLooping(true);
-        music.play();
+        super.playMusic((Music) Assets.getInstance().getAssetManager().get("audio/mortal.mp3"));
     }
 
     public void update(float delta){
         if (gc.getAsteroidManager().getActiveList().size() == 0 ||
             gc.getPlayer().getRemainsDestroy() <= 0){
-            gc.getPlayer().increaseDifficulty();
+            gc.increaseDifficulty();
             gc.getAsteroidManager().getActiveList().clear();
             for (int i = 0; i < 3; i++) {
-                Asteroid asteroid = gc.getAsteroidManager().generateAsteroid(gc.getPlayer().getDifficulty());
-                asteroid.getVelocity().x += gc.getPlayer().getDifficulty();
-                asteroid.getVelocity().y += gc.getPlayer().getDifficulty();
+                Asteroid asteroid = gc.getAsteroidManager().generateAsteroid(gc.getDifficulty());
+                asteroid.getVelocity().x += gc.getDifficulty();
+                asteroid.getVelocity().y += gc.getDifficulty();
             }
             timer = 0;
+            gc.getBotShipManager().getActiveElement().activate(gc.getPlayer().getHero().getPosition());
         }
         if (!gc.getPlayer().isAlive()){
             screenManager.changeScreen(ScreenManager.ScreenType.GAME_OVER);
@@ -91,7 +89,7 @@ public class GameScreen extends AbstractScreen {
         gr.render();
         if (timer <= 3){
             timer += delta;
-            gr.showLevelNumber(gc.getPlayer().getDifficulty());
+            gr.showLevelNumber(gc.getDifficulty());
         }
         getBatch().end();
         shop.draw();

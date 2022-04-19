@@ -23,16 +23,13 @@ public class MenuScreen extends AbstractScreen{
     private BitmapFont font72;
     private BitmapFont font24;
     private Stage stage;
-    private Music music;
 
     @Override
     public void show() {
         this.stage = new Stage(getViewport(), getBatch());
         this.font72 = Assets.getInstance().getAssetManager().get("fonts/font72.ttf");
         this.font24 = Assets.getInstance().getAssetManager().get("fonts/font24.ttf");
-        this.music = Assets.getInstance().getAssetManager().get("audio/music.mp3");
-        music.setLooping(true);
-        music.play();
+        super.playMusic((Music) Assets.getInstance().getAssetManager().get("audio/music.mp3"));
 
         Gdx.input.setInputProcessor(stage);
 
