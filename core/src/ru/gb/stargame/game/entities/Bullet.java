@@ -4,14 +4,18 @@ import com.badlogic.gdx.math.Vector2;
 import ru.gb.stargame.game.constants.BulletConstants;
 import ru.gb.stargame.game.helpers.Poolable;
 
+import static ru.gb.stargame.game.constants.BulletConstants.*;
+
 public class Bullet implements Poolable {
+
+    private OwnerBullet owner;
     private Vector2 position;
     private Vector2 velocity;
     private boolean active;
     private int damage;
 
     public Bullet() {
-        this.damage = BulletConstants.DAMAGE_SIMPLE_BULLET;
+        this.damage = DAMAGE_SIMPLE_BULLET;
         this.position = new Vector2();
         this.velocity = new Vector2();
         this.active = false;
@@ -30,10 +34,16 @@ public class Bullet implements Poolable {
         position.mulAdd(velocity, dt);
     }
 
-    public void activate(float x, float y, float vx, float vy) {
+    public void activate(float x, float y, float vx, float vy, OwnerBullet owner, int damage) {
         position.set(x, y);
         velocity.set(vx, vy);
         this.active = true;
+        this.owner = owner;
+        this.damage = damage;
+    }
+
+    public OwnerBullet getOwner() {
+        return owner;
     }
 
     public Vector2 getPosition() {

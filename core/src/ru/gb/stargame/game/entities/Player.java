@@ -11,16 +11,16 @@ public class Player {
     private int coins;
     private int destroyedAsteroid;
     private int remainsDestroy;
-    private int difficulty;
+//    private int difficulty;
     private int magnetismLevel;
 
-    public Player(TextureRegion texture, BulletManager bulletManager) {
-        this.hero = new Hero(texture, bulletManager);
+    public Player(BulletManager bulletManager) {
+        this.hero = new Hero(bulletManager);
         this.score = 0;
         this.scoreView = 0;
         this.coins = 0;
         this.destroyedAsteroid = 0;
-        this.difficulty = 1;
+//        this.difficulty = 1;
         this.remainsDestroy = AsteroidConstants.NEEDED_DESTROY_ASTEROIDS_ON_LEVEL;
         this.magnetismLevel = 2;
     }
@@ -72,14 +72,13 @@ public class Player {
         this.remainsDestroy--;
     }
 
-    public void increaseDifficulty(){
-        this.difficulty++;
+    public void resetCountAsteroid(int difficulty){
         this.remainsDestroy = AsteroidConstants.NEEDED_DESTROY_ASTEROIDS_ON_LEVEL + 10 * difficulty;
     }
 
-    public int getDifficulty() {
-        return difficulty;
-    }
+//    public int getDifficulty() {
+//        return difficulty;
+//    }
 
     public boolean reduceCoins(int coins){
         if (this.coins >= coins) {

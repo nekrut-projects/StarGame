@@ -27,7 +27,6 @@ public class GameOverScreen extends AbstractScreen{
     private BitmapFont font24;
     private BitmapFont font32;
     private Stage stage;
-    private Music music;
 
     @Override
     public void show() {
@@ -35,9 +34,7 @@ public class GameOverScreen extends AbstractScreen{
         this.font72 = Assets.getInstance().getAssetManager().get("fonts/font72.ttf");
         this.font24 = Assets.getInstance().getAssetManager().get("fonts/font24.ttf");
         this.font32 = Assets.getInstance().getAssetManager().get("fonts/font32.ttf");
-        this.music = Assets.getInstance().getAssetManager().get("audio/music.mp3");
-        music.setLooping(true);
-        music.play();
+        super.playMusic((Music) Assets.getInstance().getAssetManager().get("audio/music.mp3"));
 
         Gdx.input.setInputProcessor(stage);
 

@@ -7,12 +7,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
-import ru.gb.stargame.game.constants.HeroConstants;
+import ru.gb.stargame.game.constants.ShipConstants;
 import ru.gb.stargame.game.constants.ScreenConstants;
 import ru.gb.stargame.game.entities.*;
 import ru.gb.stargame.game.managers.InfoMessageManager;
 import ru.gb.stargame.game.managers.ParticlesManager;
 import ru.gb.stargame.screen.utils.Assets;
+
+import java.util.List;
 
 public class GameRenderer {
     private GameController gc;
@@ -57,8 +59,9 @@ public class GameRenderer {
     public void render () {
             renderBackground();
             renderBullets();
-            renderShip(gc.getPlayer().getHero(), textureShip);
-            renderShip(gc.getBot().getShip(), textureBot);
+            renderShip(textureShip, gc.getPlayer().getHero());
+            renderShip(textureBot, gc.getBotShipManager().getActiveList());
+//            renderBotShip(gc.getBotShipManager().getActiveList(), textureBot);
             renderParticles();
             renderBonusItems();
             renderInfoMessages();
@@ -105,12 +108,19 @@ public class GameRenderer {
         }
     }
 
-    private void renderShip(Ship ship, TextureRegion texture) {
+    private void renderShip(TextureRegion texture, List<BotShip> ships) {
+        for (int i = 0; i < ships.size(); i++) {
+            renderShip(texture, ships.get(i));
+        }
+    }
+
+    private void renderShip(TextureRegion texture, Ship ship) {
         batch.draw(texture, ship.getPosition().x - texture.getRegionWidth()/2,
                 ship.getPosition().y - texture.getRegionHeight()/2,
                 texture.getRegionWidth()/2, texture.getRegionHeight()/2,
                 texture.getRegionWidth(), texture.getRegionHeight(),
                 1, 1, ship.getAngle());
+
     }
 
     public void renderParticles() {
@@ -193,7 +203,7 @@ public class GameRenderer {
         sb.append("SCORE: ").append(gc.getPlayer().getScoreView()).append("\n");
         sb.append("COINS: ").append(gc.getPlayer().getCoins()).append("\n");
         sb.append("HP: ").append(gc.getPlayer().getHero().getHp()).append(" / ")
-                .append(HeroConstants.MAX_HP).append("\n");
+                .append(ShipConstants.MAX_HP).append("\n");
         sb.append("BULLETS: ").append(gc.getPlayer().getHero().getAmountBullets()).append("\n");
         sb.append("MAGNETISM LV.: ").append(gc.getPlayer().getMagnetismLevel());
         font32.draw(batch, sb, 20, 700);

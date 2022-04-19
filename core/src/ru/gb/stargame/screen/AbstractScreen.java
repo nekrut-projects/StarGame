@@ -12,6 +12,7 @@ import ru.gb.stargame.screen.utils.Assets;
 public abstract class AbstractScreen implements Screen {
     private SpriteBatch batch;
     private Viewport viewport;
+    private Music music;
 
     public AbstractScreen(SpriteBatch batch) {
         this.batch = batch;
@@ -52,6 +53,12 @@ public abstract class AbstractScreen implements Screen {
     @Override
     public void dispose() {
 
+    }
+
+    public void playMusic(Music music){
+        this.music = music;
+        this.music.setLooping(true);
+        this.music.play();
     }
 
     public SpriteBatch getBatch() {
